@@ -8,16 +8,19 @@ class AdminScreen extends StatelessWidget {
 
   // Hàm đăng xuất
   Future<void> _logout(BuildContext context) async {
-    // Xóa token từ SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt_token');
 
-    // Điều hướng về màn hình đăng nhập
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
-          (route) => false, // Xóa tất cả các route trước đó
+          (route) => false,
     );
+  }
+
+  // Hàm điều hướng đến các màn hình chức năng
+  void _navigateToScreen(BuildContext context, String screen) {
+    Navigator.pushNamed(context, screen);
   }
 
   @override
@@ -29,16 +32,114 @@ class AdminScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Gọi hàm đăng xuất
               _logout(context);
             },
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          'Welcome, Admin!',
-          style: Theme.of(context).textTheme.headlineMedium,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const UserAccountsDrawerHeader(
+              accountName: Text('Admin'),
+              accountEmail: Text('admin@domain.com'),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 50),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text("Manage Drivers"),
+              onTap: () {
+                _navigateToScreen(context, '/driver_management');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.insert_chart),
+              title: const Text("Statistics"),
+              onTap: () {
+                _navigateToScreen(context, '/statistics');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text("Settings"),
+              onTap: () {
+                _navigateToScreen(context, '/settings');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text("Logout"),
+              onTap: () {
+                _logout(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Welcome, Admin!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    switch (index) {
+                      case 0:
+                        _navigateToScreen(context, '/driver_management');
+                        break;
+                      case 1:
+                        _navigateToScreen(context, '/statistics');
+                        break;
+                      case 2:
+                        _navigateToScreen(context, '/settings');
+                        break;
+                      case 3:
+                        _logout(context);
+                        break;
+                    }
+                  },
+                  child: Card(
+                    color: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                    child: Center(
+                      child: Icon(
+                        index == 0
+                            ? Icons.people
+                            : index == 1
+                            ? Icons.insert_chart
+                            : index == 2
+                            ? Icons.settings
+                            : Icons.exit_to_app,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
