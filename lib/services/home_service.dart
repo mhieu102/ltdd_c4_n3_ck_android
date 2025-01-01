@@ -46,4 +46,39 @@ class HomeService {
       return {}; // Trả về map rỗng nếu có lỗi
     }
   }
+
+  static Future<bool> updateUserInfo(String userId, Map<String, dynamic> updatedData) async {
+    final String apiUrl = "${Config_URL.baseUrl}user/update?id=$userId";
+
+    try {
+      // Lấy token từ SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null || token.isEmpty) {
+        throw Exception('Token không tồn tại hoặc rỗng');
+      }
+
+      // Gọi API với token và dữ liệu cập nhật
+      final response = await http.put(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(updatedData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Cập nhật thông tin người dùng thành công');
+        return true;
+      } else {
+        throw Exception(
+            'Failed to update user info. HTTP status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error updating user info: $e');
+      return false;
+    }
+  }
 }

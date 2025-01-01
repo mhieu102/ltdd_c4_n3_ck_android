@@ -1,57 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../services/home_service.dart';
 
-class DriverDetailScreen extends StatelessWidget {
+class DriverDetailScreen extends StatefulWidget {
   final Map<String, dynamic> userInfo;
 
   const DriverDetailScreen({required this.userInfo, Key? key}) : super(key: key);
 
   @override
+  _DriverDetailScreenState createState() => _DriverDetailScreenState();
+}
+
+class _DriverDetailScreenState extends State<DriverDetailScreen> {
+  late Map<String, dynamic> data;
+  bool isEditing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    data = Map<String, dynamic>.from(widget.userInfo['data'] ?? {});
+  }
+
+  void _toggleEditing() {
+    setState(() {
+      isEditing = !isEditing;
+    });
+  }
+
+  Future<void> _updateDriverInfo() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: SpinKitCircle(color: Colors.orange),
+      ),
+    );
+
+    final success = await HomeService.updateUserInfo(data['id'], data);
+    Navigator.pop(context);
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Cập nhật thông tin thành công!',
+            style: GoogleFonts.roboto(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+      setState(() {
+        isEditing = false;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Cập nhật thất bại!',
+            style: GoogleFonts.roboto(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print('User Info: $userInfo');
-
-    // Lấy dữ liệu chi tiết từ userInfo['data']
-    final data = userInfo['data'] ?? {};
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chi tiết tài xế'),
+        title: Text(
+          'Chi tiết tài xế',
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+        ),
         backgroundColor: Colors.orange,
+        actions: [
+          IconButton(
+            icon: FaIcon(isEditing ? FontAwesomeIcons.floppyDisk : FontAwesomeIcons.pen),
+            onPressed: () {
+              if (isEditing) {
+                _updateDriverInfo();
+              } else {
+                _toggleEditing();
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Ảnh đại diện và thông tin chính
             Center(
               child: Column(
                 children: [
                   CircleAvatar(
-                    radius: 50,
+                    radius: 60,
                     backgroundColor: Colors.orange[100],
-                    child: const Icon(Icons.person, size: 50, color: Colors.orange),
+                    child: const FaIcon(FontAwesomeIcons.user, size: 60, color: Colors.orange),
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    data['fullName'] ?? 'Không có dữ liệu',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
+                  _buildInlineEditableField('Họ và tên', 'fullName', icon: FontAwesomeIcons.idBadge),
                   const SizedBox(height: 8),
-                  Text(
-                    data['email'] ?? 'Không có dữ liệu',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[700],
-                    ),
-                  ),
+                  _buildInlineEditableField('Email', 'email', icon: FontAwesomeIcons.envelope, isEnabled: false),
                 ],
               ),
             ),
             const SizedBox(height: 24),
-            // Thông tin chi tiết
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -68,32 +125,13 @@ class DriverDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildInfoRow(Icons.location_on, 'Địa chỉ:', data['address']),
-                  _buildInfoRow(Icons.person_outline, 'Giới tính:', data['gender']),
-                  _buildInfoRow(Icons.cake, 'Ngày sinh:', data['dateOfBirth']),
-                  _buildInfoRow(Icons.credit_card, 'Loại bằng lái:', data['classOfDriverLicense']),
-                  _buildInfoRow(Icons.phone, 'Số điện thoại:', data['phoneNumber']),
-                  _buildInfoRow(Icons.account_circle, 'Tên đăng nhập:', data['userName']),
+                  _buildInlineEditableField('Địa chỉ', 'address', icon: FontAwesomeIcons.locationDot),
+                  _buildInlineEditableField('Giới tính', 'gender', icon: FontAwesomeIcons.venusMars),
+                  _buildInlineEditableField('Ngày sinh', 'dateOfBirth', icon: FontAwesomeIcons.calendarDays),
+                  _buildInlineEditableField('Loại bằng lái', 'classOfDriverLicense', icon: FontAwesomeIcons.idCard),
+                  _buildInlineEditableField('Số điện thoại', 'phoneNumber', icon: FontAwesomeIcons.phone),
+                  _buildInlineEditableField('Tên đăng nhập', 'userName', icon: FontAwesomeIcons.user, isEnabled: false),
                 ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-                child: Text(
-                  'Quay lại',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
               ),
             ),
           ],
@@ -102,35 +140,39 @@ class DriverDetailScreen extends StatelessWidget {
     );
   }
 
-  // Hàm tạo các dòng thông tin chi tiết
-  Widget _buildInfoRow(IconData icon, String label, String? value) {
+  Widget _buildInlineEditableField(String label, String fieldKey, {IconData? icon, bool isEnabled = true}) {
+    TextEditingController controller = TextEditingController(text: data[fieldKey]);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.orange, size: 24),
+          FaIcon(icon, color: Colors.orange, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[700],
-                  ),
+            child: isEditing && isEnabled
+                ? TextFormField(
+              controller: controller,
+              onChanged: (value) {
+                data[fieldKey] = value;
+              },
+              style: GoogleFonts.roboto(fontSize: 16),
+              decoration: InputDecoration(
+                labelText: label,
+                labelStyle: GoogleFonts.roboto(color: Colors.orange[800]),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  value ?? 'Không có dữ liệu',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange, width: 2),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              ],
+              ),
+            )
+                : Text(
+              '$label: ${data[fieldKey] ?? ''}',
+              style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
             ),
           ),
         ],
