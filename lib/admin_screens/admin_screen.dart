@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login_screen.dart';
+import '../screens/login_screen.dart';
+import '../admin_screens/send_notification_screen.dart';
 
 class AdminScreen extends StatelessWidget {
   const AdminScreen({super.key});
@@ -19,8 +20,8 @@ class AdminScreen extends StatelessWidget {
   }
 
   // Hàm điều hướng đến các màn hình chức năng
-  void _navigateToScreen(BuildContext context, String screen) {
-    Navigator.pushNamed(context, screen);
+  void _navigateToScreen(BuildContext context, String routeName) {
+    Navigator.pushNamed(context, routeName);
   }
 
   @override
@@ -64,6 +65,18 @@ class AdminScreen extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.notifications),
+              title: const Text("Send Notifications"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SendNotificationScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.settings),
               title: const Text("Settings"),
               onTap: () {
@@ -97,7 +110,7 @@ class AdminScreen extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
-              itemCount: 4,
+              itemCount: 5,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
@@ -109,9 +122,17 @@ class AdminScreen extends StatelessWidget {
                         _navigateToScreen(context, '/statistics');
                         break;
                       case 2:
-                        _navigateToScreen(context, '/settings');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SendNotificationScreen(),
+                          ),
+                        );
                         break;
                       case 3:
+                        _navigateToScreen(context, '/settings');
+                        break;
+                      case 4:
                         _logout(context);
                         break;
                     }
@@ -129,6 +150,8 @@ class AdminScreen extends StatelessWidget {
                             : index == 1
                             ? Icons.insert_chart
                             : index == 2
+                            ? Icons.notifications
+                            : index == 3
                             ? Icons.settings
                             : Icons.exit_to_app,
                         size: 40,

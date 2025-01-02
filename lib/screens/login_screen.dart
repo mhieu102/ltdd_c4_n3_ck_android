@@ -3,7 +3,7 @@ import 'package:nhom3_ltdd/screens/registration_creen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/auth.dart';
-import 'admin_screen.dart';
+import '../admin_screens/admin_screen.dart';
 import 'main_screen.dart';
 
 

@@ -1,377 +1,183 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login_screen.dart';
-
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Facebook-like Interface',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const AccountScreen(),
-    );
-  }
-}
+import '../services/home_service.dart';
+import '../screens/login_screen.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+  const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  _AccountScreenState createState() => _AccountScreenState();
+  State<AccountScreen> createState() => _AccountScreenState();
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  bool _showMore = false;
-  bool _option1Expanded = false;
-  bool _option2Expanded = false;
-  bool _option3Expanded = false;
+  late Future<Map<String, dynamic>> _userInfoFuture;
 
-  final List<Map<String, dynamic>> _items = [
-    {"icon": Icons.bookmark, "title": "Đã lưu"},
-    {"icon": Icons.emoji_events, "title": "Kỷ niệm"},
-    {"icon": Icons.pageview, "title": "Trang"},
-    {"icon": Icons.ad_units, "title": "Trung tâm quảng cáo"},
-    {"icon": Icons.favorite, "title": "Hen hò"},
-    {"icon": Icons.video_label, "title": "Reels"},
-    {"icon": Icons.videogame_asset, "title": "Chơi game"},
-    {"icon": Icons.event, "title": "Sự kiện"},
-    {"icon": Icons.visibility, "title": "Lướt thấy"},
-    {"icon": Icons.face, "title": "Avatar"},
-    {"icon": Icons.message, "title": "Messenger Kids"},
-  ];
-
-  final List<String> _imageAssets = [
-    'assets/post_1.jpg',
-    'assets/post_2.jpg',
-    'assets/post_3.jpg',
-    'assets/post_4.jpg',
-    'assets/post_5.jpg',
-    'assets/post_6.jpg',
-    'assets/post_7.jpg',
-    'assets/post_1.jpg',
-    'assets/post_2.jpg',
-    'assets/post_3.jpg',
-    'assets/post_4.jpg',
-    'assets/post_5.jpg',
-    'assets/post_6.jpg',
-    'assets/post_7.jpg',
-    'assets/post_1.jpg',
-    'assets/post_2.jpg',
-    'assets/post_3.jpg',
-    'assets/post_4.jpg',
-    'assets/post_5.jpg',
-    'assets/post_6.jpg',
-    'assets/post_7.jpg',
-  ];
-  // Hàm đăng xuất
-  Future<bool> _logout(BuildContext context) async {
-    try {
-      // Xóa token từ SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('jwt_token');
-
-      // Đăng xuất thành công
-      return true;
-    } catch (e) {
-      // Xử lý lỗi nếu có
-      return false;
-    }
+  @override
+  void initState() {
+    super.initState();
+    _userInfoFuture = HomeService.fetchUserInfo();
   }
 
+  Future<void> _logout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('jwt_token');
 
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Menu"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {},
-          ),
-        ],
+        title: Text(
+          "Thông tin tài khoản",
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header section
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.blue[100],
-              child: Row(
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _userInfoFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.orange),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                "Lỗi khi tải thông tin: ${snapshot.error}",
+                style: GoogleFonts.roboto(color: Colors.red, fontSize: 16),
+              ),
+            );
+          } else if (snapshot.hasData && snapshot.data!['data'] != null) {
+            final userInfo = snapshot.data!['data'] as Map<String, dynamic>;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage('assets/post_7.jpg'),
+                  // Avatar và tên người dùng
+                  Center(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.orange[100],
+                          child: const FaIcon(
+                            FontAwesomeIcons.user,
+                            size: 60,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          userInfo['fullName'] ?? "Chưa cập nhật",
+                          style: GoogleFonts.roboto(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          userInfo['email'] ?? "Chưa cập nhật",
+                          style: GoogleFonts.roboto(color: Colors.black54),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Nguyễn Minh Hiếu',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  const SizedBox(height: 24),
+                  // Các thông tin chi tiết
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.orange[50],
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow(
+                          label: "Địa chỉ",
+                          value: userInfo['address'],
+                          icon: FontAwesomeIcons.locationDot,
+                        ),
+                        _buildInfoRow(
+                          label: "Giới tính",
+                          value: userInfo['gender'],
+                          icon: FontAwesomeIcons.venusMars,
+                        ),
+                        _buildInfoRow(
+                          label: "Ngày sinh",
+                          value: userInfo['dateOfBirth'],
+                          icon: FontAwesomeIcons.calendarDays,
+                        ),
+                        _buildInfoRow(
+                          label: "Số điện thoại",
+                          value: userInfo['phoneNumber'],
+                          icon: FontAwesomeIcons.phone,
+                        ),
+                        _buildInfoRow(
+                          label: "Tên đăng nhập",
+                          value: userInfo['userName'],
+                          icon: FontAwesomeIcons.user,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Nút Đăng xuất
+                  ElevatedButton.icon(
+                    onPressed: () => _logout(context),
+                    icon: const Icon(FontAwesomeIcons.signOutAlt, color: Colors.white),
+                    label: const Text("Đăng xuất"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                      textStyle: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-
-            // Title for shortcuts
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Text(
-                "Lối tắt của bạn",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-
-
-            // Horizontal image list
-            Container(
-              height: 100,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: _imageAssets.map((image) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-                          image: DecorationImage(
-                            image: AssetImage(image),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // Options section
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(8),
-              children: List.generate(
-                _showMore ? _items.length : 6,
-                    (index) {
-                  return _buildGridItem(
-                    _items[index]["icon"],
-                    _items[index]["title"],
-                  );
-                },
-              ),
-            ),
-
-            // Button section
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    _showMore = !_showMore;
-                  });
-                },
-                child: Text(_showMore ? "Ẩn bớt" : "Xem thêm"),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Additional options section
-            Column(
-              children: [
-                _buildExpandableButton(
-                  title: "Trợ giúp & hỗ trợ",
-                  isExpanded: _option1Expanded,
-                  onPressed: () {
-                    setState(() {
-                      _option1Expanded = !_option1Expanded;
-                    });
-                  },
-                  content: [
-                    'Trung tâm và trợ giúp',
-                    'Trạng thái tài khoản',
-                    'Báo cáo sự cố',
-                    'Hộp thư hỗ trợ',
-                    'Điều khoản & chính sách',
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _buildExpandableButton(
-                  title: "Cài đặt & quyền riêng tư",
-                  isExpanded: _option2Expanded,
-                  onPressed: () {
-                    setState(() {
-                      _option2Expanded = !_option2Expanded;
-                    });
-                  },
-                  content: [
-                    'Cài đặt',
-                    'Trung tâm quyền riêng tư',
-                    'Yêu cầu từ thiết bị',
-                    'Lịch sử liên kết',
-                    'Ngôn ngữ',
-                    'Đơn đặt hàng và thanh toán',
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _buildExpandableButton(
-                  title: "Cũng Từ Meta",
-                  isExpanded: _option3Expanded,
-                  onPressed: () {
-                    setState(() {
-                      _option3Expanded = !_option3Expanded;
-                    });
-                  },
-                  content: [
-                    'Messenger',
-                    'Instagram',
-                    'WhatsApp',
-                  ],
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Logout button
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  // Hiển thị thông báo đang xử lý
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Đang đăng xuất...'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-
-                  // Gọi hàm logout và chờ kết quả
-                  bool isLoggedOut = await _logout(context);
-
-                  if (isLoggedOut) {
-                    // Điều hướng về màn hình đăng nhập
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                          (route) => false, // Xóa tất cả các route trước đó
-                    );
-                  } else {
-                    // Hiển thị thông báo lỗi
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Đăng xuất thất bại. Vui lòng thử lại!')),
-                    );
-                  }
-                },
-                child: const Text("Đăng xuất"),
-              ),
-            ),
-
-
-            const SizedBox(height: 20),
-          ],
-        ),
+            );
+          } else {
+            return const Center(
+              child: Text("Không có dữ liệu người dùng"),
+            );
+          }
+        },
       ),
     );
   }
 
-  Widget _buildExpandableButton({
-    required String title,
-    required bool isExpanded,
-    required VoidCallback onPressed,
-    required List<String> content,
-  }) {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: onPressed,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title, style: const TextStyle(fontSize: 16)),
-                Icon(
-                  isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                  size: 24,
-                ),
-              ],
+  Widget _buildInfoRow({required String label, required String? value, required IconData icon}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          FaIcon(icon, color: Colors.orange, size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '$label: ${value ?? "Chưa cập nhật"}',
+              style: GoogleFonts.roboto(fontSize: 16, color: Colors.black87),
             ),
           ),
-        ),
-        if (isExpanded) ...[
-          const SizedBox(height: 10),
-          Column(
-            children: content.map((text) {
-              return SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Nhấn vào: $text')),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.blue,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(text, textAlign: TextAlign.left),
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
         ],
-      ],
-    );
-  }
-
-  Widget _buildGridItem(IconData icon, String title) {
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: InkWell(
-        onTap: () {
-          // Thêm hành động khi nhấn
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 40, color: Colors.blue),
-              const SizedBox(height: 8),
-              Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ),
       ),
     );
   }
