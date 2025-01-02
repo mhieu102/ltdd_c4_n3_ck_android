@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('backgroundhome.jpg'), // Đường dẫn đến hình ảnh trong thư mục assets
+                image: AssetImage('assets/backgroundhome.jpg'), // Đường dẫn đến hình ảnh trong thư mục assets
                 fit: BoxFit.cover,
               ),
             ),
@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(icon, color: Colors.orange),
         ),
         SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 14, color: Colors.white)),
+        Text(label, style: TextStyle(fontSize: 14, color: Colors.black)),
       ],
     );
   }
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(fontSize: 14, color: Colors.white),
+          style: TextStyle(fontSize: 14, color: Colors.black),
           textAlign: TextAlign.center,
         ),
       ],

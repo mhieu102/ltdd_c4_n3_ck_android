@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Ảnh nền
           Positioned.fill(
             child: Image.asset(
-              'backgroundhome.jpg', // Đường dẫn đến ảnh
+              'assets/backgroundhome.jpg', // Đường dẫn đến ảnh
               fit: BoxFit.cover, // Đảm bảo ảnh phủ toàn màn hình
             ),
           ),

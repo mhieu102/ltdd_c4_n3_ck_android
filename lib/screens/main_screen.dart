@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Color _getIconColor(int index) {
 
-    return _currentIndex == index ? Colors.blue : Colors.grey;
+    return _currentIndex == index ? Colors.blue : Colors.orange;
 
   }
 
@@ -106,7 +106,7 @@ class _MainScreenState extends State<MainScreen> {
 
             icon: Icon(Icons.home, color: _getIconColor(0)),
 
-            label: 'Home',
+            label: 'Trang chủ',
 
           ),
 
@@ -114,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
 
             icon: Icon(Icons.video_library, color: _getIconColor(1)),
 
-            label: 'Video',
+            label: 'Hướng dẫn',
 
           ),
 
@@ -122,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
 
             icon: Icon(Icons.account_circle, color: _getIconColor(2)),
 
-            label: 'Account',
+            label: 'Tài khoản',
 
           ),
 
@@ -130,14 +130,14 @@ class _MainScreenState extends State<MainScreen> {
 
             icon: Icon(Icons.shopping_cart, color: _getIconColor(3)),
 
-            label: 'Market',
+            label: 'Lịch trình',
 
           ),
           BottomNavigationBarItem(
 
             icon: Icon(Icons.notifications, color: _getIconColor(4)),
 
-            label: 'Notification',
+            label: 'Thông báo',
 
           ),
 
@@ -149,7 +149,7 @@ class _MainScreenState extends State<MainScreen> {
 
         selectedItemColor: Colors.blue,
 
-        unselectedItemColor: Colors.grey,
+        unselectedItemColor: Colors.orange,
 
         elevation: 10,
 
