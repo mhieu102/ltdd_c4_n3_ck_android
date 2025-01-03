@@ -117,7 +117,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
               child: const Text(
                 'Gửi thông báo',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
               ),
             ),
             const SizedBox(height: 32),

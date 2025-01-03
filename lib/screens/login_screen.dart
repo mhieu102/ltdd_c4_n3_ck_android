@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _usernameController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: 'Usrname',
+                        hintText: 'Username',
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.85), // Nền nhẹ hơn
                         border: OutlineInputBorder(
@@ -241,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (states.contains(MaterialState.disabled)) {
                                 return Colors.cyan.shade200; // Màu nhạt khi nút bị vô hiệu hóa
                               }
-                              return Colors.cyan; // Màu mặc định
+                              return Colors.orange; // Màu mặc định
                             },
                           ),
                         ),
@@ -267,23 +267,37 @@ class _LoginScreenState extends State<LoginScreen> {
 //----------------------------------------------------------------
                     const SizedBox(height: 20),
                     // Thêm điều hướng đến màn hình đăng ký
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Chưa có tài khoản? "),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const RegistrationScreen()),
-                            );
-                          },
-                          child: const Text(
-                            'Đăng ký ngay',
-                            style: TextStyle(color: Colors.blue),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9), // Đặt độ trong suốt
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Chưa có tài khoản? ", style: TextStyle(fontSize: 15)),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+                              );
+                            },
+                            child: const Text(
+                              'Đăng ký ngay',
+                              style: TextStyle(color: Colors.blue,fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

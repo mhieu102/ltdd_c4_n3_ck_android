@@ -121,8 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildFeatureButton(Icons.directions_bus, 'Mua vé xe'),
                     _buildFeatureButton(Icons.local_taxi, 'Gọi TAXI'),
                     _buildFeatureButton(Icons.car_rental, 'Gọi Ô Tô'),
-                    _buildFeatureButton(Icons.car_repair, 'Xe Hợp Đồng'),
-                    _buildFeatureButton(Icons.two_wheeler, 'Gọi Xe 2 Bánh'),
+                    // _buildFeatureButton(Icons.car_repair, 'Xe Hợp Đồng'),
+                    // _buildFeatureButton(Icons.two_wheeler, 'Gọi Xe 2 Bánh'),
                   ],
                 ),
               ),
@@ -141,10 +141,10 @@ class _HomeScreenState extends State<HomeScreen> {
         CircleAvatar(
           backgroundColor: Colors.orange[100],
           radius: 24,
-          child: Icon(icon, color: Colors.orange),
+          child: Icon(icon,size: 30, color: Colors.orange),
         ),
         SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 14, color: Colors.black)),
+        Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),
       ],
     );
   }
@@ -155,12 +155,12 @@ class _HomeScreenState extends State<HomeScreen> {
         CircleAvatar(
           backgroundColor: Colors.orange[100],
           radius: 32,
-          child: Icon(icon, size: 32, color: Colors.orange),
+          child: Icon(icon, size: 35, color: Colors.orange),
         ),
         SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(fontSize: 14, color: Colors.black),
+          style: TextStyle(fontSize: 16, color: Colors.black),
           textAlign: TextAlign.center,
         ),
       ],
