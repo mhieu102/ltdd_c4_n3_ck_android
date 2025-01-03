@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'screens/custom_info_windows.dart';
 import 'screens/login_screen.dart';
+import '';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      //home: const HutechMap(),
       home: const LoginScreen(),
       debugShowCheckedModeBanner: false,
     );

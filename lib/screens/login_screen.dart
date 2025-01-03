@@ -99,10 +99,12 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           // Ảnh nền
-          Positioned.fill(
-            child: Image.asset(
-              'assets/backgroundhome.jpg', // Đường dẫn đến ảnh
-              fit: BoxFit.cover, // Đảm bảo ảnh phủ toàn màn hình
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/backgroundhome.jpg'), // Đường dẫn đến hình ảnh trong thư mục assets
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           // Nội dung màn hình đăng nhập
