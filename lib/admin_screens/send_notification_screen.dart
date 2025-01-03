@@ -18,12 +18,34 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> with Si
   final AdminService _adminService = AdminService();
 
   bool _isLoading = false;
+  List<dynamic> _readNotifications = [];
+  List<dynamic> _unreadNotifications = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
+    _fetchNotifications();
   }
+
+  Future<void> _fetchNotifications() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final readResult = await _adminService.fetchReadNotifications();
+    final unreadResult = await _adminService.fetchUnreadNotifications();
+
+    setState(() {
+      _isLoading = false;
+      _readNotifications = readResult['success'] ? readResult['data'] : [];
+      _unreadNotifications = unreadResult['success'] ? unreadResult['data'] : [];
+      print('Read Notifications: $_readNotifications');
+      print('Unread Notifications: $_unreadNotifications');
+    });
+  }
+
+
 
   Future<void> _sendNotification() async {
     setState(() {
@@ -98,6 +120,54 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> with Si
       _messageController.clear();
       _titleController.clear();
     }
+  }
+
+  Widget _buildNotificationsList(List<dynamic> notifications, String emptyMessage) {
+    if (notifications.isEmpty) {
+      return Center(
+        child: Text(
+          emptyMessage,
+          style: GoogleFonts.roboto(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (context, index) {
+        final notification = notifications[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ListTile(
+            title: Text(
+              notification['title'],
+              style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  notification['description'],
+                  style: GoogleFonts.roboto(fontSize: 14),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Người gửi: ${notification['senderName']}',
+                  style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  'Ngày tạo: ${notification['createdAt']}',
+                  style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
+                ),
+              ],
+            ),
+            leading: Icon(
+              notification['isRead'] ? Icons.check_circle : Icons.circle,
+              color: notification['isRead'] ? Colors.green : Colors.orange,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildSendToDriverForm() {
@@ -195,6 +265,8 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> with Si
           tabs: const [
             Tab(icon: Icon(Icons.person), text: 'Gửi đến 1 tài xế'),
             Tab(icon: Icon(Icons.group), text: 'Gửi đến tất cả tài xế'),
+            Tab(icon: Icon(Icons.mark_email_read), text: 'Đã đọc'),
+            Tab(icon: Icon(Icons.mark_email_unread), text: 'Chưa đọc'),
           ],
         ),
       ),
@@ -203,6 +275,8 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> with Si
         children: [
           _buildSendToDriverForm(),
           _buildSendToAllDriversForm(),
+          _buildNotificationsList(_readNotifications, 'Không có thông báo đã đọc.'),
+          _buildNotificationsList(_unreadNotifications, 'Không có thông báo chưa đọc.'),
         ],
       ),
     );

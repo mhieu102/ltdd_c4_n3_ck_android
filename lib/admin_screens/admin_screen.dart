@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/login_screen.dart';
 import '../admin_screens/send_notification_screen.dart';
+import 'driver_list_screen.dart';
 
 class AdminScreen extends StatelessWidget {
   const AdminScreen({super.key});
@@ -54,7 +55,12 @@ class AdminScreen extends StatelessWidget {
               leading: const Icon(Icons.people),
               title: const Text("Manage Drivers"),
               onTap: () {
-                _navigateToScreen(context, '/driver_management');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DriverListScreen(),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -116,7 +122,12 @@ class AdminScreen extends StatelessWidget {
                   onTap: () {
                     switch (index) {
                       case 0:
-                        _navigateToScreen(context, '/driver_management');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DriverListScreen(),
+                          ),
+                        );
                         break;
                       case 1:
                         _navigateToScreen(context, '/statistics');
