@@ -42,6 +42,15 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         backgroundColor: Colors.orange,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.signOutAlt,
+              color: Colors.white,
+            ),
+            onPressed: () => _logout(context),
+          ),
+        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _userInfoFuture,
@@ -63,7 +72,6 @@ class _AccountScreenState extends State<AccountScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Avatar và tên người dùng
                   Center(
                     child: Column(
                       children: [
@@ -93,7 +101,6 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Các thông tin chi tiết
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -136,18 +143,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           icon: FontAwesomeIcons.user,
                         ),
                       ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Nút Đăng xuất
-                  ElevatedButton.icon(
-                    onPressed: () => _logout(context),
-                    icon: const Icon(FontAwesomeIcons.signOutAlt, color: Colors.white),
-                    label: const Text("Đăng xuất"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                      textStyle: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],

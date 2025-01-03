@@ -141,11 +141,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     );
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     final notifications = snapshot.data!;
+
+                    // Đảo ngược danh sách để hiển thị thông báo mới nhất trước
+                    final reversedNotifications = notifications.reversed.toList();
+
                     return ListView.separated(
-                      itemCount: notifications.length,
+                      itemCount: reversedNotifications.length,
                       separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) {
-                        final notification = notifications[index];
+                        final notification = reversedNotifications[index];
                         return ListTile(
                           title: Text(
                             notification['title'] ?? 'Không có tiêu đề',
@@ -164,7 +168,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       child: Text('Không có thông báo nào.'),
                     );
                   }
-                },
+                }
+
               ),
             ),
           ],
