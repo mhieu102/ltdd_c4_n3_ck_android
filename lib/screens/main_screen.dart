@@ -3,8 +3,9 @@ import 'home_screen.dart';
 import 'account_screen.dart';
 import 'market_screen.dart';
 import 'notification_screen.dart';
-import 'driver_guide_screen.dart'; // Import DriverGuideScreen
-
+import 'driver_guide_screen.dart';
+import 'custom_info_windows.dart';// Import DriverGuideScreen
+import 'schedule_screen.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -20,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     const DriverGuideScreen(), // Hướng dẫn
     const AccountScreen(),
-    const MarketScreen(),
+    const ScheduleScreen(),
     NotificationScreen(),
   ];
 
