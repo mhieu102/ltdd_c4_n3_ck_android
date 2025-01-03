@@ -260,6 +260,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> with Si
     return Scaffold(
       appBar: AppBar(
         title: const Text('Quản lý thông báo'),
+        backgroundColor: Colors.orange,
         bottom: TabBar(
           controller: _tabController,
           tabs: const [

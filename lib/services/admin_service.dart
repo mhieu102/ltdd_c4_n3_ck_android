@@ -276,5 +276,128 @@ class AdminService {
     }
   }
 
+  // Tạo ngẫu nhiên một lịch trình
+  Future<Map<String, dynamic>> generateRandomSchedule() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        return {"success": false, "message": "Authentication token not found."};
+      }
+
+      final uri = Uri.parse("${Config_URL.baseUrl}schedule/generate_random_schedule");
+
+      final response = await http.post(
+        uri,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        bool status = data['status'];
+        return {
+          "success": status,
+          "message": data['message'],
+        };
+      } else {
+        return {"success": false, "message": "Failed to generate random schedule."};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Network error: $e"};
+    }
+  }
+
+  // Xác nhận lịch trình dựa vào ID
+  Future<Map<String, dynamic>> toggleScheduleConfirmation(String idSchedule) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        return {"success": false, "message": "Authentication token not found."};
+      }
+
+      final uri = Uri.parse("${Config_URL.baseUrl}schedule/toggle_schedule_confirmation")
+          .replace(queryParameters: {"idSchedule": idSchedule});
+
+      final response = await http.post(
+        uri,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        bool status = data['status'];
+        return {
+          "success": status,
+          "message": data['message'],
+        };
+      } else {
+        return {"success": false, "message": "Failed to toggle schedule confirmation."};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Network error: $e"};
+    }
+  }
+
+
+  // Lấy danh sách tất cả lịch trình
+  Future<Map<String, dynamic>> getAllSchedules() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        return {"success": false, "data": [], "message": "Authentication token not found."};
+      }
+
+      final uri = Uri.parse("${Config_URL.baseUrl}schedule/get_all_schedules");
+
+      final response = await http.get(
+        uri,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+
+        if (data['status'] == true) {
+          return {
+            "success": true,
+            "data": data['data'] ?? [],
+            "message": data['message'] ?? "Lịch trình đã được tải thành công."
+          };
+        } else {
+          return {
+            "success": false,
+            "data": [],
+            "message": data['message'] ?? "Không thể tải danh sách lịch trình."
+          };
+        }
+      } else {
+        return {
+          "success": false,
+          "data": [],
+          "message": "Server error, failed to fetch schedules."
+        };
+      }
+    } catch (e) {
+      return {
+        "success": false,
+        "data": [],
+        "message": "Network error: $e"
+      };
+    }
+  }
 
 }

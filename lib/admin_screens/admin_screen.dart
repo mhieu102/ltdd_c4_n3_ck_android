@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nhom3_ltdd/admin_screens/schedule_list_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/login_screen.dart';
@@ -65,9 +66,15 @@ class AdminScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.insert_chart),
-              title: const Text("Statistics"),
+              title: const Text("Schedules"),
               onTap: () {
-                _navigateToScreen(context, '/statistics');
+                // Điều hướng đến ListScheduleScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ListScheduleScreen(),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -130,7 +137,12 @@ class AdminScreen extends StatelessWidget {
                         );
                         break;
                       case 1:
-                        _navigateToScreen(context, '/statistics');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ListScheduleScreen(),
+                          ),
+                        );
                         break;
                       case 2:
                         Navigator.push(
