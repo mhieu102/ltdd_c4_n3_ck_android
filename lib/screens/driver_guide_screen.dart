@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'account_guide_screen.dart'; // Import trang hướng dẫn tài khoản
-import 'schedule_guide_screen.dart'; // Import trang hướng dẫn lịch trình
-import 'notification_guide_screen.dart'; // Import trang hướng dẫn thông báo
+import 'package:google_fonts/google_fonts.dart';
+import 'account_guide_screen.dart';
+import 'schedule_guide_screen.dart';
+import 'notification_guide_screen.dart';
 
 class DriverGuideScreen extends StatelessWidget {
   const DriverGuideScreen({super.key});
@@ -10,7 +11,12 @@ class DriverGuideScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hướng dẫn cho tài xế'),
+        title: Text(
+          "Hướng dẫn cho tài xế",
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
       ),
       body: Center(
         child: Padding(
@@ -19,12 +25,20 @@ class DriverGuideScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Hướng dẫn cho tài xế',
+                'Trang hướng dẫn dành cho tài xế',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
+              Image.asset(
+                'assets/facebook_logo.png',
+                height: 200,
+                fit: BoxFit.cover,
+              ),
               const Text(
-                'Hướng dẫn cho Tài xế là một tài nguyên thiết yếu dành cho những người lái xe, giúp họ nắm vững các kỹ năng và kiến thức cần thiết để vận hành phương tiện một cách an toàn và hiệu quả. Trang này cung cấp thông tin chi tiết về quy tắc giao thông, mẹo lái xe an toàn, và các tình huống có thể gặp phải trên đường. Ngoài ra, người dùng cũng có thể tìm thấy các video hướng dẫn trực quan, giúp cải thiện khả năng lái xe của mình. Hãy khám phá và trang bị cho mình những kiến thức hữu ích để trở thành một tài xế tự tin và an toàn!.',
+                'Hướng dẫn cho Tài xế là một tài nguyên thiết yếu dành'
+                    ' cho những người lái xe, giúp họ nắm vững các kỹ năng'
+                    ' và kiến thức cần thiết để vận hành phương tiện một cách'
+                    ' an toàn và hiệu quả.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),
@@ -36,7 +50,31 @@ class DriverGuideScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const AccountGuideScreen()),
                   );
                 },
-                child: const Text('Hướng dẫn tài khoản'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent, // Màu nền trong suốt
+                  elevation: 0, // Không có bóng
+                  side: BorderSide(color: Colors.orange, width: 2), // Khung màu cam
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Bo tròn góc
+                  ),
+                ).copyWith(
+                  // Tùy chỉnh trạng thái hover
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        return Colors.orange.withOpacity(0.2); // Màu nền khi hover
+                      }
+                      return Colors.transparent; // Màu mặc định
+                    },
+                  ),
+                ),
+                child: const Text(
+                  'Hướng dẫn tài khoản',
+                  style: TextStyle(
+                    fontSize: 16, // Kích thước chữ
+                    color: Colors.orange, // Màu chữ
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -46,7 +84,31 @@ class DriverGuideScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const ScheduleGuideScreen()),
                   );
                 },
-                child: const Text('Hướng dẫn lịch trình'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent, // Màu nền trong suốt
+                  elevation: 0, // Không có bóng
+                  side: BorderSide(color: Colors.orange, width: 2), // Khung màu cam
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Bo tròn góc
+                  ),
+                ).copyWith(
+                  // Tùy chỉnh trạng thái hover
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        return Colors.orange.withOpacity(0.2); // Màu nền khi hover
+                      }
+                      return Colors.transparent; // Màu mặc định
+                    },
+                  ),
+                ),
+                child: const Text(
+                  'Hướng dẫn lịch trình',
+                  style: TextStyle(
+                    fontSize: 16, // Kích thước chữ
+                    color: Colors.orange, // Màu chữ
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -56,7 +118,31 @@ class DriverGuideScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const NotificationGuideScreen()),
                   );
                 },
-                child: const Text('Hướng dẫn thông báo'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent, // Màu nền trong suốt
+                  elevation: 0, // Không có bóng
+                  side: BorderSide(color: Colors.orange, width: 2), // Khung màu cam
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Bo tròn góc
+                  ),
+                ).copyWith(
+                  // Tùy chỉnh trạng thái hover
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        return Colors.orange.withOpacity(0.2); // Màu nền khi hover
+                      }
+                      return Colors.transparent; // Màu mặc định
+                    },
+                  ),
+                ),
+                child: const Text(
+                  'Hướng dẫn thông báo',
+                  style: TextStyle(
+                    fontSize: 16, // Kích thước chữ
+                    color: Colors.orange, // Màu chữ
+                  ),
+                ),
               ),
             ],
           ),

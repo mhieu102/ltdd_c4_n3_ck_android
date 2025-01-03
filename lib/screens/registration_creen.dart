@@ -326,6 +326,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             'Đăng ký',
             style: TextStyle(
               fontSize: 16,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -335,14 +336,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("Đã có tài khoản? "),
+          const Text("Đã có tài khoản? ",style: TextStyle(fontSize: 15),),
           TextButton(
             onPressed: () {
               Navigator.pop(context); // Quay lại màn hình đăng nhập
             },
             child: const Text(
               'Đăng nhập',
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: Colors.blue,fontSize: 15),
             ),
           ),
         ],

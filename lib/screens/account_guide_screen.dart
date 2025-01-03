@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AccountGuideScreen extends StatelessWidget {
   const AccountGuideScreen({super.key});
@@ -7,7 +8,12 @@ class AccountGuideScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hướng dẫn tài khoản'),
+        title: Text(
+          "Hướng dẫn thao tác tài khoản",
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
       ),
       body: Center(
         child: const Text(

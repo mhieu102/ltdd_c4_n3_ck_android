@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NotificationGuideScreen extends StatelessWidget {
   const NotificationGuideScreen({super.key});
@@ -7,7 +8,12 @@ class NotificationGuideScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hướng dẫn thông báo'),
+        title: Text(
+          "Hướng dẫn thao tác thông báo",
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
       ),
       body: Center(
         child: const Text(
