@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import '../services/home_service.dart';
 import 'driver_detail_screen.dart';
@@ -11,6 +12,39 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String userName = 'Người dùng'; // Biến lưu tên người dùng
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserInfo();
+  }
+
+  Future<void> _fetchUserInfo() async {
+    try {
+      final userInfo = await HomeService.fetchUserInfo();
+      if (userInfo.isNotEmpty) {
+        setState(() {
+          userName = userInfo['data']['fullName'] ?? 'Người dùng';
+        });
+      } else {
+        setState(() {
+          userName = 'Người dùng';
+        });
+      }
+    } catch (e) {
+      print('Lỗi khi lấy thông tin người dùng: $e');
+      setState(() {
+        userName = 'Người dùng';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/backgroundhome.jpg'), // Đường dẫn đến hình ảnh trong thư mục assets
+                image: AssetImage('assets/backgroundhome.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -29,14 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: [
               Container(
-                color: Colors.orange.withOpacity(0.8), // Nền màu cam trong suốt
+                color: Colors.orange.withOpacity(0.8),
                 padding: EdgeInsets.all(16.0),
                 child: Row(
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        // Xử lý sự kiện nhấn vào avatar
                         bool isLoading = false;
-                        // Tránh gọi lại khi đang tải
                         if (isLoading) return;
                         isLoading = true;
                         try {
@@ -75,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Icon(Icons.person, color: Colors.orange),
                       ),
                     ),
-
                     SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,8 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Xin chào,',
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
-                        Text(
-                          'Trung Tuấn',
+                        isLoading
+                            ? CircularProgressIndicator() // Hiển thị vòng loading
+                            : Text(
+                          userName,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -99,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-
+              // Phần còn lại của giao diện
               Container(
                 padding: EdgeInsets.all(16.0),
                 child: Row(
@@ -121,17 +156,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildFeatureButton(Icons.directions_bus, 'Mua vé xe'),
                     _buildFeatureButton(Icons.local_taxi, 'Gọi TAXI'),
                     _buildFeatureButton(Icons.car_rental, 'Gọi Ô Tô'),
-                    // _buildFeatureButton(Icons.car_repair, 'Xe Hợp Đồng'),
-                    // _buildFeatureButton(Icons.two_wheeler, 'Gọi Xe 2 Bánh'),
                   ],
                 ),
               ),
-
             ],
           ),
         ],
       ),
-
     );
   }
 
@@ -141,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
         CircleAvatar(
           backgroundColor: Colors.orange[100],
           radius: 24,
-          child: Icon(icon,size: 30, color: Colors.orange),
+          child: Icon(icon, size: 30, color: Colors.orange),
         ),
         SizedBox(height: 8),
         Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),
