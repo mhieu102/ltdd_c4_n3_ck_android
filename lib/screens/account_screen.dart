@@ -121,6 +121,7 @@ class _AccountScreenState extends State<AccountScreen> {
           "Thông tin tài khoản",
           style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
         ),
+
         backgroundColor: Colors.orange,
         centerTitle: true,
         actions: [
@@ -133,6 +134,36 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ],
       ),
+      /*appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                "Thông tin tài khoản",
+                style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => _logout(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              ),
+              child: Row(
+                children: [
+                  const Icon(FontAwesomeIcons.signOutAlt, color: Colors.white),
+                  const SizedBox(width: 4),
+                  const Text("Đăng xuất", style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+      ),*/
       body: FutureBuilder<Map<String, dynamic>>(
         future: _userInfoFuture,
         builder: (context, snapshot) {
