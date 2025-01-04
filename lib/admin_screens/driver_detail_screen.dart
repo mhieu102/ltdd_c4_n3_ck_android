@@ -57,6 +57,10 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
                   ),
                   const SizedBox(height: 10),
                   ListTile(
+                    leading: const Icon(Icons.person, color: Colors.orange),
+                    title: Text(driver['userName'] ?? 'Không có username'),
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.phone, color: Colors.orange),
                     title: Text(driver['phoneNumber'] ?? 'Không có số điện thoại'),
                   ),

@@ -388,7 +388,7 @@ class AdminService {
         return {
           "success": false,
           "data": [],
-          "message": "Server error, failed to fetch schedules."
+          "message": "Lỗi Server, không thể tải danh sách lịch trình."
         };
       }
     } catch (e) {
@@ -400,4 +400,42 @@ class AdminService {
     }
   }
 
+  // Xóa Lịch trình
+  Future<Map<String, dynamic>> deleteSchedule(String idSchedule) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        return {
+          "success": false,
+          "message": "Authentication token not found."
+        };
+      }
+
+      final uri = Uri.parse("${Config_URL.baseUrl}schedule/delete_schedule")
+          .replace(queryParameters: {"idSchedule": idSchedule});
+
+      final response = await http.delete(
+        uri,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        bool status = data['status'];
+        return {
+          "success": status,
+          "message": data['message'],
+        };
+      } else {
+        return {"success": false, "message": "Xóa lịch trình thất bại."};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Network error: $e"};
+    }
+  }
 }

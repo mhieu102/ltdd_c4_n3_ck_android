@@ -66,18 +66,30 @@ class _DriverListScreenState extends State<DriverListScreen> {
                         child: Icon(Icons.person, color: Colors.white),
                       ),
                       title: Text(
-                        driver['fullName'] ?? 'Không có tên',
+                        driver['userName'] ?? 'Không có tên người dùng',
                         style: GoogleFonts.roboto(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      subtitle: Text(
-                        driver['phoneNumber'] ?? 'Không có số điện thoại',
-                        style: GoogleFonts.roboto(
-                          fontSize: 14,
-                          color: Colors.black54,
-                        ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            driver['phoneNumber'] ?? 'Không có số điện thoại',
+                            style: GoogleFonts.roboto(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          Text(
+                            driver['fullName'] ?? 'Không có tên',
+                            style: GoogleFonts.roboto(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                       onTap: () {

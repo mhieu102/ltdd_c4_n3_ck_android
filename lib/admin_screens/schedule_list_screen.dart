@@ -55,6 +55,16 @@ class _ListScheduleScreenState extends State<ListScheduleScreen> {
     _fetchSchedules(); // Cập nhật danh sách lịch trình
   }
 
+  Future<void> _deleteSchedule(String idSchedule) async {
+    final result = await _adminService.deleteSchedule(idSchedule);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(result['message'])),
+    );
+    if (result['success']) {
+      _fetchSchedules(); // Cập nhật danh sách lịch trình sau khi xóa
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +103,8 @@ class _ListScheduleScreenState extends State<ListScheduleScreen> {
                       children: [
                         SlidableAction(
                           onPressed: (context) {
-                            // Xử lý xóa lịch trình ở đây
+                            // Gọi phương thức xóa lịch trình
+                            _deleteSchedule(schedule['id'].toString());
                           },
                           backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
@@ -115,6 +126,8 @@ class _ListScheduleScreenState extends State<ListScheduleScreen> {
                             Text('Địa điểm giao: ${schedule['deliveryLocation']}'),
                             Text('Chi phí: \$${schedule['shippingCost'].toStringAsFixed(2)}'),
                             Text('Trạng thái: ${schedule['isConfirmed'] ? "Đã xác nhận" : "Chưa xác nhận"}'),
+                            Text('Thời gian bắt đầu: ${schedule['startTime'] ?? "Chưa xác định"}'),
+                            Text('Thời gian kết thúc: ${schedule['endTime'] ?? "Chưa xác định"}'),
                           ],
                         ),
                         trailing: IconButton(

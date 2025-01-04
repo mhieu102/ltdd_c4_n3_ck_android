@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-
 import '../services/home_service.dart';
 import 'driver_detail_screen.dart';
 
@@ -52,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // Background image
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/backgroundhome.jpg'),
                 fit: BoxFit.cover,
@@ -64,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 color: Colors.orange.withOpacity(0.8),
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
                     GestureDetector(
