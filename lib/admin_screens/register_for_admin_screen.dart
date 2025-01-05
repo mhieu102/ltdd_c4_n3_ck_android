@@ -22,9 +22,9 @@ class _RegisterForAdminState extends State<RegisterForAdmin> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController licenseClassController = TextEditingController();
 
-  String role = 'Admin'; // Mặc định là Admin
-  DateTime? selectedDate; // Biến lưu trữ ngày đã chọn
-  String? selectedGender; // Biến lưu trữ giới tính đã chọn
+  String role = 'Admin';
+  DateTime? selectedDate;
+  String? selectedGender;
 
   bool _isLoading = false;
   bool _obscurePassword = true;

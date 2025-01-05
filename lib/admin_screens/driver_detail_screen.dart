@@ -20,12 +20,59 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
     _driverFuture = _adminService.fetchDriverById(widget.driverId);
   }
 
+  Future<void> _deleteUser() async {
+    final result = await _adminService.deleteUser(widget.driverId);
+    if (result['success']) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Xóa tài xế thành công!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Lỗi: ${result['message']}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chi tiết tài xế'),
         backgroundColor: Colors.orange,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Xóa tài xế'),
+                  content: const Text('Bạn có chắc chắn muốn xóa tài xế này?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Hủy'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Đóng hộp thoại
+                        _deleteUser(); // Gọi phương thức xóa
+                      },
+                      child: const Text('Xóa'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _driverFuture,

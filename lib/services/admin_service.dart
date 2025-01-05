@@ -505,4 +505,43 @@ class AdminService {
       };
     }
   }
+
+  //Xóa User
+  Future<Map<String, dynamic>> deleteUser(String userId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        return {
+          "success": false,
+          "message": "Authentication token not found."
+        };
+      }
+
+      final uri = Uri.parse("${Config_URL.baseUrl}user/delete")
+          .replace(queryParameters: {"id": userId}); // Thêm ID vào query parameters
+
+      final response = await http.delete(
+        uri,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        bool status = data['status'];
+        return {
+          "success": status,
+          "message": data['message'],
+        };
+      } else {
+        return {"success": false, "message": "Failed to delete user."};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Network error: $e"};
+    }
+  }
 }
