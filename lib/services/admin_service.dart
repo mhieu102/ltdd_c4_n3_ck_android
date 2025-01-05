@@ -185,8 +185,6 @@ class AdminService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
 
-        print('Fetched Drivers Raw: $data');
-
         if (data['status'] == true) {
           return {
             "success": true,
@@ -243,8 +241,6 @@ class AdminService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
-
-        print('Fetched Driver Details Raw: $data');
 
         if (data['status'] == true) {
           return {
@@ -436,6 +432,77 @@ class AdminService {
       }
     } catch (e) {
       return {"success": false, "message": "Network error: $e"};
+    }
+  }
+
+  Future<Map<String, dynamic>> adminRegister({
+    required String username,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String phoneNumber,
+    required String fullName,
+    required String address,
+    required String gender,
+    required String? dateOfBirth,
+    required String classOfDriverLicense,
+    required String role,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        return {
+          "status": false,
+          "message": "Authentication token not found."
+        };
+      }
+
+      final uri = Uri.parse("${Config_URL.baseUrl}authenticate/admin_register")
+          .replace(queryParameters: {
+        "role": role, // Truyền vai trò vào
+      });
+
+      final response = await http.post(
+        uri,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "Username": username,
+          "Email": email,
+          "Password": password,
+          "ConfirmPassword": confirmPassword,
+          "PhoneNumber": phoneNumber,
+          "FullName": fullName,
+          "Address": address,
+          "Gender": gender,
+          "DateOfBirth": dateOfBirth,
+          "ClassOfDriverLicense": classOfDriverLicense,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Trả về kết quả với cấu trúc đúng
+        final responseBody = jsonDecode(response.body);
+        return {
+          "status": responseBody['status'],
+          "message": responseBody['message'],
+        };
+      } else {
+        print("Response body: ${response.body}");
+        return {
+          "status": false,
+          "message": "Đăng ký không thành công. Vui lòng kiểm tra lại."
+        };
+      }
+    } catch (e) {
+      return {
+        "status": false,
+        "message": "Lỗi mạng: $e"
+      };
     }
   }
 }

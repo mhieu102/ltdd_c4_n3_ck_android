@@ -40,8 +40,6 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> with Si
       _isLoading = false;
       _readNotifications = readResult['success'] ? readResult['data'] : [];
       _unreadNotifications = unreadResult['success'] ? unreadResult['data'] : [];
-      print('Read Notifications: $_readNotifications');
-      print('Unread Notifications: $_unreadNotifications');
     });
   }
 

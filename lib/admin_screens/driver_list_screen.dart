@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/admin_service.dart';
 import 'driver_detail_screen.dart';
+import 'register_for_admin_screen.dart';
 
 class DriverListScreen extends StatefulWidget {
   const DriverListScreen({Key? key}) : super(key: key);
@@ -114,6 +115,16 @@ class _DriverListScreenState extends State<DriverListScreen> {
             }
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RegisterForAdmin()),
+          );
+        },
+        backgroundColor: Colors.orange,
+        child: const Icon(Icons.add),
       ),
     );
   }
