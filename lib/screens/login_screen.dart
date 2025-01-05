@@ -30,17 +30,23 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _checkToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('jwt_token');
+    String? role = prefs.getString('user_role'); // Lấy vai trò người dùng
 
-    if (token != null) {
-      // Nếu token tồn tại, chuyển hướng đến MainScreen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
-      );
+    if (token != null && role != null) {
+      if (role == 'Admin') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AdminScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      }
     }
   }
 
-  // Hàm xử lý đăng nhập
   Future<void> _handleLogin() async {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
 
-    // Gọi Auth.login để xử lý đăng nhập
     Map<String, dynamic> result = await Auth.login(
       _usernameController.text,
       _passwordController.text,
@@ -63,12 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = false);
 
     if (result['success'] == true) {
-      // Lưu token vào SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt_token', result['token']); // Lưu token
-
-      // Lấy vai trò người dùng từ token
-      String role = result['decodedToken']['role'] ?? 'User'; // Thay đổi cách lấy vai trò
+      String role = result['decodedToken']['role'] ?? 'User'; // Lấy vai trò
+      await prefs.setString('user_role', role); // Lưu vai trò
 
       if (role == 'Admin') {
         Navigator.pushReplacement(
@@ -82,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } else {
-      // Hiển thị thông báo lỗi
       String errorMessage = result['message'] ?? 'Tên đăng nhập hoặc mật khẩu không đúng';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -92,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
