@@ -15,9 +15,7 @@ class NotificationUserService {
         return {"success": false, "message": "Authentication token not found."};
       }
       // Tạo URL với receiverName là admin
-      final uri = Uri.parse("${Config_URL.baseUrl}notification/send")
-          .replace(queryParameters: {"receiverName": "admin"});
-
+      final uri = Uri.parse("${Config_URL.baseUrl}notification/send_to_all_admins");
       final response = await http.post(
         uri,
         headers: {
@@ -59,15 +57,13 @@ class NotificationUserService {
 
       final uri = Uri.parse("${Config_URL.baseUrl}notification/received");
 
-      print(uri);
-      print(token);
       final response = await http.get(
         uri,
         headers: {
           "Authorization": "Bearer $token",
         },
       );
-      print("Phản hồi API: ${response.body}");
+
       // Kiểm tra mã trạng thái HTTP
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

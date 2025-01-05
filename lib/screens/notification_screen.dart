@@ -25,7 +25,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   void _fetchNotifications() {
-    _receivedNotificationsFuture = _notificationUserService.getReceivedNotifications();
+    _receivedNotificationsFuture = _notificationUserService.getReceivedNotifications().then((notifications) {
+      return notifications.reversed.toList();
+    });
   }
 
   Future<void> _sendNotificationToAdmin() async {
@@ -45,7 +47,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          result['success'] ? 'Thông báo đã được gửi đến admin!' : 'Gửi thông báo thất bại!',
+          result['success'] ? 'Thông báo đã được gửi đến quản trị viên!' : 'Gửi thông báo thất bại!',
           style: GoogleFonts.roboto(color: Colors.white),
         ),
         backgroundColor: result['success'] ? Colors.green : Colors.red,
@@ -55,9 +57,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     if (result['success']) {
       _titleController.clear();
       _messageController.clear();
-      setState(() {
-        _fetchNotifications();
-      });
+      _fetchNotifications();
     }
   }
 
@@ -74,7 +74,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Gửi thông báo đến Admin',
+              'Gửi thông báo đến quản trị viên',
               style: GoogleFonts.roboto(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -117,7 +117,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
               child: const Text(
                 'Gửi thông báo',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
             const SizedBox(height: 32),
@@ -142,14 +142,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     final notifications = snapshot.data!;
 
-                    // Đảo ngược danh sách để hiển thị thông báo mới nhất trước
-                    final reversedNotifications = notifications.reversed.toList();
-
                     return ListView.separated(
-                      itemCount: reversedNotifications.length,
+                      itemCount: notifications.length,
                       separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) {
-                        final notification = reversedNotifications[index];
+                        final notification = notifications[index];
                         return ListTile(
                           title: Text(
                             notification['title'] ?? 'Không có tiêu đề',
@@ -168,8 +165,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       child: Text('Không có thông báo nào.'),
                     );
                   }
-                }
-
+                },
               ),
             ),
           ],
