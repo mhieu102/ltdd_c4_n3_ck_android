@@ -23,7 +23,7 @@ class Auth {
     required String fullName,
     required String address,
     required String gender,
-    required String dateOfBirth,
+    required String? dateOfBirth,
     required String licenseClass,
   }) async {
     // Tạo body để gửi lên API
