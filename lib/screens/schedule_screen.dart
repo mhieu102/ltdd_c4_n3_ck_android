@@ -149,11 +149,27 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 20),
+
                           // Nút để bắt đầu lịch trình
                           if (schedule['status'] == 'NotStarted' && schedule['isConfirmed'] == true)
                             ElevatedButton(
                               onPressed: () => _updateScheduleStatus(schedule['id'].toString(), 'InProgress'),
-                              child: const Text("Bắt Đầu"),
+                              child: const Text(
+                                "Bắt Đầu",
+                                style: TextStyle(
+                                  color: Colors.white, // Màu chữ
+                                  fontSize: 16, // Kích thước chữ (nếu cần)
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange, // Màu nền
+                                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Padding quanh chữ
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20), // Bo góc
+                                  side: BorderSide(color: Colors.orange, width: 2), // Khung bên ngoài (nếu cần)
+                                ),
+                              ),
                             ),
                           // Nút để bắt đầu lại nếu đang tạm hoãn
                           if (isPending)
@@ -168,15 +184,57 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () => _updateScheduleStatus(schedule['id'].toString(), 'Completed'),
-                                  child: const Text("Hoàn Thành"),
+                                  child: const Text(
+                                    "Hoàn Thành",
+                                    style: TextStyle(
+                                      color: Colors.black, // Màu chữ
+                                      fontSize: 16, // Kích thước chữ
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue, // Màu nền
+                                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Padding quanh chữ
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20), // Bo góc
+                                      side: BorderSide(color: Colors.blue, width: 2), // Khung bên ngoài (nếu cần)
+                                    ),
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () => _updateScheduleStatus(schedule['id'].toString(), 'Pending'),
-                                  child: const Text("Tạm Hoãn"),
+                                  child: const Text(
+                                    "Tạm Hoãn",
+                                    style: TextStyle(
+                                      color: Colors.black, // Màu chữ
+                                      fontSize: 16, // Kích thước chữ
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.yellow, // Màu nền
+                                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Padding quanh chữ
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20), // Bo góc
+                                      side: BorderSide(color: Colors.yellow, width: 2), // Khung bên ngoài (nếu cần)
+                                    ),
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () => _updateScheduleStatus(schedule['id'].toString(), 'Failed'),
-                                  child: const Text("Thất Bại"),
+                                  child: const Text(
+                                    "Thất Bại",
+                                    style: TextStyle(
+                                      color: Colors.black, // Màu chữ
+                                      fontSize: 16, // Kích thước chữ
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red, // Màu nền
+                                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Padding quanh chữ
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20), // Bo góc
+                                      side: BorderSide(color: Colors.red, width: 2), // Khung bên ngoài (nếu cần)
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
