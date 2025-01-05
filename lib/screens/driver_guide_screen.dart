@@ -69,7 +69,7 @@ class DriverGuideScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Hướng dẫn tài khoản',
+                  'Xem hướng dẫn tài khoản',
                   style: TextStyle(
                     fontSize: 16, // Kích thước chữ
                     color: Colors.orange, // Màu chữ
@@ -103,7 +103,7 @@ class DriverGuideScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Hướng dẫn lịch trình',
+                  'Xem hướng dẫn lịch trình',
                   style: TextStyle(
                     fontSize: 16, // Kích thước chữ
                     color: Colors.orange, // Màu chữ
@@ -137,7 +137,7 @@ class DriverGuideScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Hướng dẫn thông báo',
+                  'Xem hướng dẫn thông báo',
                   style: TextStyle(
                     fontSize: 16, // Kích thước chữ
                     color: Colors.orange, // Màu chữ
