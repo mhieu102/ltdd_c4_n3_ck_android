@@ -30,8 +30,8 @@ class DriverGuideScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Image.asset(
-                'assets/facebook_logo.png',
-                height: 200,
+                'assets/huongdantc.png',
+                height: 170,
                 fit: BoxFit.cover,
               ),
               const Text(

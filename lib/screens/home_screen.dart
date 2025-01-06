@@ -107,19 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Icon(Icons.person, color: Colors.orange),
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Xin chào,',
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                         isLoading
-                            ? CircularProgressIndicator() // Hiển thị vòng loading
+                            ? const CircularProgressIndicator() // Hiển thị vòng loading
                             : Text(
                           userName,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -127,33 +127,51 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    Spacer(),
-                    Icon(Icons.qr_code, color: Colors.white),
+                    const Spacer(),
+                    const Icon(Icons.qr_code, color: Colors.white),
                   ],
                 ),
               ),
-              // Phần còn lại của giao diện
+
               Container(
-                padding: EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildMenuButton(Icons.attach_money, 'Nạp tiền'),
-                    _buildMenuButton(Icons.money_off, 'Rút tiền'),
-                    _buildMenuButton(Icons.account_balance_wallet, 'FUTAPay'),
-                  ],
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12), // Bo tròn góc
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12), // Bo tròn góc
+                  child: Image.asset(
+                    'assets/hinhgt1.png', // Đường dẫn đến hình ảnh
+                    height: 170, // Chiều cao của hình ảnh
+                    fit: BoxFit.cover, // Cách hình ảnh được hiển thị
+                  ),
                 ),
               ),
-              Divider(color: Colors.white),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1,
-                  padding: EdgeInsets.all(8.0),
+
+              // Khung cho phần nội dung
+              Container(
+                margin: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white, // Màu nền của khung
+                  borderRadius: BorderRadius.circular(12), // Bo tròn các góc
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: const Offset(0, 2), // Đổ bóng phía dưới
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // Căn trái cho các cột
                   children: [
-                    _buildFeatureButton(Icons.directions_bus, 'Mua vé xe'),
-                    _buildFeatureButton(Icons.local_taxi, 'Gọi TAXI'),
-                    _buildFeatureButton(Icons.car_rental, 'Gọi Ô Tô'),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Chúc bạn lái xe an toàn và bình an trên mọi nẻo đường! Luôn giữ được tinh thần tỉnh táo trong suốt hành trình!',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      textAlign: TextAlign.justify, // Căn đều hai bên
+                    ),
                   ],
                 ),
               ),
@@ -172,8 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
           radius: 24,
           child: Icon(icon, size: 30, color: Colors.orange),
         ),
-        SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontSize: 16, color: Colors.black)),
       ],
     );
   }
@@ -186,10 +204,10 @@ class _HomeScreenState extends State<HomeScreen> {
           radius: 32,
           child: Icon(icon, size: 35, color: Colors.orange),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(fontSize: 16, color: Colors.black),
+          style: const TextStyle(fontSize: 16, color: Colors.black),
           textAlign: TextAlign.center,
         ),
       ],
